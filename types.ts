@@ -18,6 +18,26 @@ export enum Gender {
   FEMALE = 'Female'
 }
 
+export type Role = 'Admin' | 'Staff';
+
+export interface LeaveBalance {
+  AL: number; // Annual
+  MC: number; // Medical
+  RL: number; // Replacement
+  HL: number; // Hospitalization
+}
+
+export interface SalaryPackage {
+  basic: number;
+  travelAllowance: number;
+  foodAllowance: number;
+  gymBenefit: number;
+  facilitiesBenefit: number;
+  birthdayBenefit: number;
+  nightShiftAllowance: number;
+  fixedOtRate?: number; // Optional custom rate, otherwise uses standard calc
+}
+
 export interface Employee {
   id: string;
   fullName: string;
@@ -27,6 +47,7 @@ export interface Employee {
   icNumber: string; // Identity Card
   gender: Gender;
   age: number;
+  avatarUrl?: string;
   
   // Banking & Statutory
   bankName: string;
@@ -40,17 +61,22 @@ export interface Employee {
   department: string;
   joinDate: string;
   employmentType: EmploymentType;
-  basicSalary: number;
+  
+  // Salary Package
+  salaryPackage: SalaryPackage;
   
   // Status
   status: 'Active' | 'Resigned' | 'Interviewing';
   interviewDate?: string;
   interviewTime?: string;
+  interviewAttended?: boolean; // New field for tracker
   resignNoticePeriod?: string; // e.g. "2 Months"
   
-  // Claims
+  // Claims & Leave & Time
   medicalClaimBalance: number;
   medicalClaimUsed: number;
+  leaveBalance: LeaveBalance;
+  accumulatedOvertimeHours: number; // From Attendance Tracker
 }
 
 export interface PayrollRecord {
@@ -62,6 +88,9 @@ export interface PayrollRecord {
   overtimeHours: number;
   overtimeAmount: number;
   bonus: number;
+  claimsReimbursement: number;
+  unpaidLeaveDays: number;
+  unpaidLeaveDeduction: number;
   
   // Deductions
   kwspEmployee: number;
@@ -84,6 +113,8 @@ export interface TimeLog {
   date: string;
   clockIn: string; // HH:mm
   clockOut: string | null; // HH:mm
+  ipAddress?: string;
+  locationNote?: string;
   overtimeHours: number;
 }
 
@@ -95,6 +126,17 @@ export interface LeaveRequest {
   endDate: string;
   reason: string;
   status: 'Pending' | 'Approved' | 'Rejected';
+}
+
+export interface ClaimRecord {
+  id: string;
+  employeeId: string;
+  date: string;
+  type: 'Medical' | 'Travel' | 'Other';
+  amount: number;
+  description: string;
+  status: 'Pending' | 'Approved' | 'Rejected';
+  receiptUrl?: string;
 }
 
 export interface Asset {
