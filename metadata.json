@@ -1,0 +1,5 @@
+{
+  "name": "HR & Payroll Pro",
+  "description": "A comprehensive HR management system including payroll calculation (KWSP, SOCSO, EIS, Tax), employee hiring records, attendance tracking, leave management, and asset tracking.",
+  "requestFramePermissions": []
+}
